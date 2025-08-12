@@ -1,0 +1,26 @@
+/* You can add global styles to this file, and also import other style files */
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: #f5f5f5; color: #333; }
+
+/* Material overrides for better visibility on light background */
+.mat-form-field-label, .mat-select-value {
+  color: rgba(0, 0, 0, 0.87) !important; /* Darker text for labels and selected values */
+}
+
+.mat-option {
+  color: rgba(0, 0, 0, 0.87); /* Darker text for select options */
+}
+
+.mat-button-toggle-checked {
+  background-color: #e0e0e0 !important; /* Lighter background for checked toggle buttons */
+  color: rgba(0, 0, 0, 0.87) !important;
+}
+
+.mat-list-item {
+  color: rgba(0, 0, 0, 0.87); /* Darker text for list items */
+}

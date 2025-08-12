@@ -1,0 +1,120 @@
+<div class="min-h-screen p-4 sm:p-8 font-sans">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header: Coin Selection -->
+    <header class="mb-8 flex items-center space-x-4">
+      <!-- Added flex and space-x-4 -->
+      <mat-form-field appearance="fill" class="w-full sm:w-64">
+        <mat-label class="text-gray-400">Select Coin</mat-label>
+        <mat-select
+          [(ngModel)]="selectedPair"
+          (selectionChange)="selectPair($event.value)"
+          class="text-white"
+        >
+          <mat-form-field appearance="fill" class="w-full px-4 pt-2">
+            <input
+              matInput
+              placeholder="Search"
+              [(ngModel)]="coinSearchTerm"
+              (ngModelChange)="filterCoins()"
+            />
+          </mat-form-field>
+          @for (pair of filteredAvailablePairs; track pair) {
+          <mat-option [value]="pair">
+            {{ pair }}
+          </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <button
+        mat-icon-button
+        (click)="addFavorite()"
+        aria-label="Add to favorites"
+      >
+        <mat-icon>favorite</mat-icon>
+      </button>
+    </header>
+
+    <!-- Real-time Price Section -->
+    <section class="text-center mb-8">
+      <h2 class="text-5xl font-bold mb-2">
+        {{ currentPrice ? (+currentPrice | number : "1.2-2") : "Loading..." }}
+        <span class="text-3xl text-gray-500">USDT</span>
+      </h2>
+      <!-- <div
+        class="text-2xl"
+        [ngClass]="{
+          'text-green-500': priceChangePercent > 0,
+          'text-red-500': priceChangePercent < 0,
+          'text-gray-400': priceChangePercent === 0
+        }"
+      >
+        {{ priceChangePercent | number : "1.2-2" }}%
+      </div> -->
+      <div class="text-sm text-gray-400 mt-2">
+        Volume: {{ currentVolume ? (+currentVolume | number) : "N/A" }}
+      </div>
+    </section>
+
+    <!-- Time Interval Selection -->
+    <section class="flex justify-center mb-8">
+      <mat-button-toggle-group
+        [(ngModel)]="selectedInterval"
+        (change)="selectInterval($event.value)"
+        aria-label="Time Interval"
+      >
+        @for (interval of intervals; track interval) {
+        <mat-button-toggle [value]="interval">
+          {{ interval }}
+        </mat-button-toggle>
+        }
+      </mat-button-toggle-group>
+    </section>
+
+    <!-- Chart Section -->
+    <section class="mb-12">
+      <app-chart [options]="chartOptions"></app-chart>
+    </section>
+
+    <!-- Favorites List -->
+    <section>
+      <h3 class="text-2xl font-bold mb-4">Favorites</h3>
+      <div class="bg-gray-100 rounded-lg p-4">
+        <mat-list>
+          <mat-list-item class="!h-auto py-2 font-bold border-b border-gray-300">
+            <div class="flex items-center w-full">
+              <span class="flex-1 text-lg">幣種</span>
+              <span class="flex-1 text-lg text-center">價格</span>
+              <span class="w-10 h-10"></span> <!-- Placeholder for the button -->
+            </div>
+          </mat-list-item>
+          @for (fav of favorites; track fav.symbol) {
+          <mat-list-item class="!h-auto py-2">
+            <div class="flex items-center w-full">
+              <span class="font-bold text-lg flex-1">{{ fav.symbol }}</span>
+              <span class="text-lg flex-1 text-center">{{
+                +fav.price | number : "1.2-2"
+              }}</span>
+              <!-- <span
+                class="text-lg flex-1 text-right"
+                [ngClass]="{
+                  'text-green-500': fav.change > 0,
+                  'text-red-500': fav.change < 0
+                }"
+              >
+                {{ fav.change | number : "1.2-2" }}%
+              </span> -->
+              <button
+                mat-icon-button
+                (click)="removeFavorite(fav.symbol)"
+                aria-label="Remove from favorites"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </mat-list-item>
+          }
+        </mat-list>
+      </div>
+    </section>
+  </div>
+</div>
